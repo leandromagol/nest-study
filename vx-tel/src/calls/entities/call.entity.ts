@@ -31,7 +31,7 @@ export class Call {
     updated_at: Date;
 
     @DeleteDateColumn()
-    public deleted_at: Date;
+    deleted_at: Date;
 
     @AfterLoad()
     decimalPrice(){
