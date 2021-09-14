@@ -1,5 +1,6 @@
 import {
-    AfterLoad, BeforeInsert, BeforeUpdate,
+    BeforeInsert,
+    BeforeUpdate,
     Column,
     CreateDateColumn,
     DeleteDateColumn,
@@ -7,24 +8,23 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
+import * as bcrypt from 'bcrypt';
+import {createDeflateRaw} from "zlib";
 
 
 @Entity()
-export class Call {
+export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    origin_ddd: number
+    name: string;
+
+    @Column({unique:true})
+    email: string;
 
     @Column()
-    destiny_ddd: number
-
-    @Column()
-    price_per_minute: number
-
-    @Column()
-    price_per_minute_decimal: string
+    password: string;
 
     @CreateDateColumn()
     created_at: Date;
@@ -34,10 +34,9 @@ export class Call {
 
     @DeleteDateColumn()
     deleted_at: Date;
-
     @BeforeUpdate() @BeforeInsert()
-    decimalPriceUpdate() {
-        this.price_per_minute_decimal = (this.price_per_minute / 100).toFixed(2);
+   async hashPassword() {
+        this.password = await bcrypt.hash(this.password,10);
     }
-
+   
 }
