@@ -133,21 +133,24 @@ describe('CallsService', () => {
                 time: call_time,
                 plan_name: 'FaleMais 30',
                 value_with_plan: 0,
-                value_without_plan: 3800
+                value_without_plan: '38,00'
             };
-            const result = await service.simulation(11,16,call_time,plan.id);
+            const result = await service
+                .simulation({origin_ddd:11, destiny_ddd:16, call_time:call_time, plan_id:plan.id});
             expect(result).toStrictEqual(simulation)
         });
         it('should not found plan in simulation',  async ()=> {
             mockRepositoryPlan.findOne.mockReturnValue(null);
-            const result = await service.simulation(11,16,20,1);
+            const result = await service
+                .simulation({origin_ddd:11,destiny_ddd:16,call_time:20,plan_id:1});
             expect(result).toBe('plan not found')
         });
         it('should not found call in simulation',  async ()=> {
             const plan = planTestsUtils.validPlan()
             mockRepositoryPlan.findOne.mockReturnValue(plan)
             mockRepository.findOne.mockReturnValue(null);
-            const result = await service.simulation(11,16,20,1);
+            const result = await service
+                .simulation({origin_ddd:11, destiny_ddd:16, call_time:20, plan_id:1});
             expect(result).toBe('call not found')
         });
     })

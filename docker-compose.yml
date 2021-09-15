@@ -6,13 +6,14 @@ services:
     restart: always
     env_file: .env
     ports:
-      - 3308:3306
+      - ${DB_PORT}:${DB_DOCKER_PORT}
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
       MYSQL_DATABASE: "${DB_DATABASE}"
       MYSQL_USER: "${DB_USERNAME}"
       MYSQL_PASSWORD: "${DB_PASSWORD}"
       MYSQL_ROOT_HOST: '%'  # needs to be enclosed with quotes
+      SECRET_KEY=secretKey: "${SECRET_KEY}"
 
   aplication:
     build:

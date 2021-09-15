@@ -6,6 +6,7 @@ import {Call} from "./entities/call.entity";
 import {Repository} from "typeorm";
 import {Plan} from "../plans/entities/plan.entity";
 import {BaseService} from "../common/serivce/base.service";
+import {integerToDecimal} from "../common/helpers";
 
 @Injectable()
 export class CallsService extends BaseService {
@@ -27,9 +28,11 @@ export class CallsService extends BaseService {
         return await this.callRepository.save({...call, ...updateCallDto});
     }
 
-    async simulation(origin_ddd: number, destiny_ddd: number,
-                     call_time: number, plan_id: number) {
-        const plan = await this.planRepository.findOne(plan_id);
+    async simulation(param:{
+                         origin_ddd: number, destiny_ddd: number,
+                         call_time: number, plan_id: number
+                     }) {
+        const plan = await this.planRepository.findOne(param.plan_id);
         if (!plan) {
             return 'plan not found'
         }
@@ -37,8 +40,8 @@ export class CallsService extends BaseService {
             .findOne({
                 where:
                     {
-                        origin_ddd: origin_ddd,
-                        destiny_ddd: destiny_ddd
+                        origin_ddd: param.origin_ddd,
+                        destiny_ddd: param.destiny_ddd
                     }
             });
         if (!call) {
@@ -47,10 +50,10 @@ export class CallsService extends BaseService {
         return {
             origin: call.origin_ddd,
             destiny: call.destiny_ddd,
-            time: call_time,
+            time: param.call_time,
             plan_name: plan.name,
-            value_with_plan: this.calcValueWithPlan(call, plan, call_time),
-            value_without_plan: this.calcValueWithoutPlan(call, call_time)
+            value_with_plan: integerToDecimal(this.calcValueWithPlan(call, plan,param.call_time)),
+            value_without_plan: integerToDecimal(this.calcValueWithoutPlan(call, param.call_time))
         }
     }
 
