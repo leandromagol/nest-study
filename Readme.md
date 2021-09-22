@@ -1,4 +1,3 @@
-#Vortx Show me the code
 
 ### Inciando o projeto
 ## 💻 Pré-requisitos
