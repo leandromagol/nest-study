@@ -26,10 +26,5 @@ Apos preencher esses dados execute o comando.
 $ docker compose up -d
 ``
 
-Apos a finalização desse comando execute. 
-
-``
-docker exec -it votrx_aplication_1 yarn seed:refresh
-``
 
 pronto a aplicação de banckend estara rodando no localhost porta 5000
